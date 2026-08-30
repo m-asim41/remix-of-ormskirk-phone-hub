@@ -33,6 +33,7 @@ import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminBuyPhoneRouteImport } from './routes/_authenticated/admin.buy-phone'
 import { Route as AuthenticatedAdminCustomersRouteImport } from './routes/_authenticated/admin.customers'
+import { Route as AuthenticatedAdminDayEndRouteImport } from './routes/_authenticated/admin.day-end'
 import { Route as AuthenticatedAdminDirectSaleRouteImport } from './routes/_authenticated/admin.direct-sale'
 import { Route as AuthenticatedAdminEnquiriesRouteImport } from './routes/_authenticated/admin.enquiries'
 import { Route as AuthenticatedAdminInvoiceTermsRouteImport } from './routes/_authenticated/admin.invoice-terms'
@@ -172,6 +173,12 @@ const AuthenticatedAdminCustomersRoute =
     path: '/customers',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminDayEndRoute =
+  AuthenticatedAdminDayEndRouteImport.update({
+    id: '/day-end',
+    path: '/day-end',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminDirectSaleRoute =
   AuthenticatedAdminDirectSaleRouteImport.update({
     id: '/direct-sale',
@@ -296,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/shop/': typeof ShopIndexRoute
   '/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -337,6 +345,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopIndexRoute
   '/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -381,6 +390,7 @@ export interface FileRoutesById {
   '/shop/': typeof ShopIndexRoute
   '/_authenticated/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/_authenticated/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/_authenticated/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/_authenticated/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -425,6 +435,7 @@ export interface FileRouteTypes {
     | '/shop/'
     | '/admin/buy-phone'
     | '/admin/customers'
+    | '/admin/day-end'
     | '/admin/direct-sale'
     | '/admin/enquiries'
     | '/admin/invoice-terms'
@@ -466,6 +477,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/admin/buy-phone'
     | '/admin/customers'
+    | '/admin/day-end'
     | '/admin/direct-sale'
     | '/admin/enquiries'
     | '/admin/invoice-terms'
@@ -509,6 +521,7 @@ export interface FileRouteTypes {
     | '/shop/'
     | '/_authenticated/admin/buy-phone'
     | '/_authenticated/admin/customers'
+    | '/_authenticated/admin/day-end'
     | '/_authenticated/admin/direct-sale'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/invoice-terms'
@@ -722,6 +735,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCustomersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/day-end': {
+      id: '/_authenticated/admin/day-end'
+      path: '/day-end'
+      fullPath: '/admin/day-end'
+      preLoaderRoute: typeof AuthenticatedAdminDayEndRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/direct-sale': {
       id: '/_authenticated/admin/direct-sale'
       path: '/direct-sale'
@@ -847,6 +867,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBuyPhoneRoute: typeof AuthenticatedAdminBuyPhoneRoute
   AuthenticatedAdminCustomersRoute: typeof AuthenticatedAdminCustomersRoute
+  AuthenticatedAdminDayEndRoute: typeof AuthenticatedAdminDayEndRoute
   AuthenticatedAdminDirectSaleRoute: typeof AuthenticatedAdminDirectSaleRoute
   AuthenticatedAdminEnquiriesRoute: typeof AuthenticatedAdminEnquiriesRoute
   AuthenticatedAdminInvoiceTermsRoute: typeof AuthenticatedAdminInvoiceTermsRoute
@@ -870,6 +891,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBuyPhoneRoute: AuthenticatedAdminBuyPhoneRoute,
   AuthenticatedAdminCustomersRoute: AuthenticatedAdminCustomersRoute,
+  AuthenticatedAdminDayEndRoute: AuthenticatedAdminDayEndRoute,
   AuthenticatedAdminDirectSaleRoute: AuthenticatedAdminDirectSaleRoute,
   AuthenticatedAdminEnquiriesRoute: AuthenticatedAdminEnquiriesRoute,
   AuthenticatedAdminInvoiceTermsRoute: AuthenticatedAdminInvoiceTermsRoute,

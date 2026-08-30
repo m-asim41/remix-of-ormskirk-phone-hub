@@ -67,6 +67,11 @@ function InvoiceDetail() {
   const [voidOpen, setVoidOpen] = useState(false);
   const [format, setFormat] = useState<PrintFormat>("a4");
   const [reason, setReason] = useState("");
+  const [refundOpen, setRefundOpen] = useState(false);
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refundMethod, setRefundMethod] = useState("CASH");
+  const [refundReason, setRefundReason] = useState("");
+  const [restock, setRestock] = useState(true);
 
   useEffect(() => {
     if (print !== "1" || !data || printed.current) return undefined;

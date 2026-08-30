@@ -114,6 +114,27 @@ function InvoiceDetail() {
     onError: (error: Error) => toast.error(error.message),
   });
 
+  const refundInvoice = useMutation({
+    mutationFn: async () =>
+      callRpc("refund_invoice", {
+        p: {
+          client_ref: newClientRef(),
+          invoice_id: invoiceId,
+          amount_pence: poundsToPence(refundAmount),
+          method: refundMethod,
+          reason: refundReason,
+          restock,
+        },
+      }),
+    onSuccess: () => {
+      toast.success("Refund recorded.");
+      setRefundOpen(false);
+      setRefundReason("");
+      refresh();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
   const openPayment = useCallback(() => {
     const inv = data?.invoice;
     if (!inv || inv.status !== "FINAL" || inv.balance_pence <= 0) return;
@@ -163,6 +184,22 @@ function InvoiceDetail() {
               {invoice.status === "FINAL" && invoice.balance_pence > 0 && (
                 <Button onClick={openPayment}>Take payment</Button>
               )}
+              {canVoid &&
+                invoice.status === "FINAL" &&
+                invoice.kind !== "PHONE_PURCHASE" &&
+                invoice.amount_paid_pence > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setRefundAmount(penceToPounds(invoice.amount_paid_pence));
+                      setRefundMethod("CASH");
+                      setRestock(true);
+                      setRefundOpen(true);
+                    }}
+                  >
+                    <Undo2 className="mr-2 size-4" /> Refund
+                  </Button>
+                )}
               {canVoid && invoice.status === "FINAL" && (
                 <Button variant="outline" onClick={() => setVoidOpen(true)}>
                   <Ban className="mr-2 size-4" /> Void

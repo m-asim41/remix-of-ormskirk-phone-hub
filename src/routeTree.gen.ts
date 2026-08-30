@@ -24,6 +24,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as SellYourPhoneRouteImport } from './routes/sell-your-phone'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UnlockingRouteImport } from './routes/unlocking'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -32,6 +33,7 @@ import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminBuyPhoneRouteImport } from './routes/_authenticated/admin.buy-phone'
 import { Route as AuthenticatedAdminCustomersRouteImport } from './routes/_authenticated/admin.customers'
+import { Route as AuthenticatedAdminDayEndRouteImport } from './routes/_authenticated/admin.day-end'
 import { Route as AuthenticatedAdminDirectSaleRouteImport } from './routes/_authenticated/admin.direct-sale'
 import { Route as AuthenticatedAdminEnquiriesRouteImport } from './routes/_authenticated/admin.enquiries'
 import { Route as AuthenticatedAdminInvoiceTermsRouteImport } from './routes/_authenticated/admin.invoice-terms'
@@ -124,6 +126,11 @@ const SellYourPhoneRoute = SellYourPhoneRouteImport.update({
   path: '/sell-your-phone',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -164,6 +171,12 @@ const AuthenticatedAdminCustomersRoute =
   AuthenticatedAdminCustomersRouteImport.update({
     id: '/customers',
     path: '/customers',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminDayEndRoute =
+  AuthenticatedAdminDayEndRouteImport.update({
+    id: '/day-end',
+    path: '/day-end',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminDirectSaleRoute =
@@ -282,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -289,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/shop/': typeof ShopIndexRoute
   '/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -323,12 +338,14 @@ export interface FileRoutesByTo {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/shop': typeof ShopIndexRoute
   '/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -365,6 +382,7 @@ export interface FileRoutesById {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -372,6 +390,7 @@ export interface FileRoutesById {
   '/shop/': typeof ShopIndexRoute
   '/_authenticated/admin/buy-phone': typeof AuthenticatedAdminBuyPhoneRoute
   '/_authenticated/admin/customers': typeof AuthenticatedAdminCustomersRoute
+  '/_authenticated/admin/day-end': typeof AuthenticatedAdminDayEndRoute
   '/_authenticated/admin/direct-sale': typeof AuthenticatedAdminDirectSaleRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/invoice-terms': typeof AuthenticatedAdminInvoiceTermsRoute
@@ -408,6 +427,7 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/admin'
@@ -415,6 +435,7 @@ export interface FileRouteTypes {
     | '/shop/'
     | '/admin/buy-phone'
     | '/admin/customers'
+    | '/admin/day-end'
     | '/admin/direct-sale'
     | '/admin/enquiries'
     | '/admin/invoice-terms'
@@ -449,12 +470,14 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/shop/$slug'
     | '/shop'
     | '/admin/buy-phone'
     | '/admin/customers'
+    | '/admin/day-end'
     | '/admin/direct-sale'
     | '/admin/enquiries'
     | '/admin/invoice-terms'
@@ -490,6 +513,7 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/_authenticated/admin'
@@ -497,6 +521,7 @@ export interface FileRouteTypes {
     | '/shop/'
     | '/_authenticated/admin/buy-phone'
     | '/_authenticated/admin/customers'
+    | '/_authenticated/admin/day-end'
     | '/_authenticated/admin/direct-sale'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/invoice-terms'
@@ -533,6 +558,7 @@ export interface RootRouteChildren {
   ReviewsRoute: typeof ReviewsRoute
   SellRoute: typeof SellRoute
   SellYourPhoneRoute: typeof SellYourPhoneRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   UnlockingRoute: typeof UnlockingRoute
   ShopSlugRoute: typeof ShopSlugRoute
@@ -646,6 +672,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellYourPhoneRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -700,6 +733,13 @@ declare module '@tanstack/react-router' {
       path: '/customers'
       fullPath: '/admin/customers'
       preLoaderRoute: typeof AuthenticatedAdminCustomersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/day-end': {
+      id: '/_authenticated/admin/day-end'
+      path: '/day-end'
+      fullPath: '/admin/day-end'
+      preLoaderRoute: typeof AuthenticatedAdminDayEndRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/direct-sale': {
@@ -827,6 +867,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBuyPhoneRoute: typeof AuthenticatedAdminBuyPhoneRoute
   AuthenticatedAdminCustomersRoute: typeof AuthenticatedAdminCustomersRoute
+  AuthenticatedAdminDayEndRoute: typeof AuthenticatedAdminDayEndRoute
   AuthenticatedAdminDirectSaleRoute: typeof AuthenticatedAdminDirectSaleRoute
   AuthenticatedAdminEnquiriesRoute: typeof AuthenticatedAdminEnquiriesRoute
   AuthenticatedAdminInvoiceTermsRoute: typeof AuthenticatedAdminInvoiceTermsRoute
@@ -850,6 +891,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBuyPhoneRoute: AuthenticatedAdminBuyPhoneRoute,
   AuthenticatedAdminCustomersRoute: AuthenticatedAdminCustomersRoute,
+  AuthenticatedAdminDayEndRoute: AuthenticatedAdminDayEndRoute,
   AuthenticatedAdminDirectSaleRoute: AuthenticatedAdminDirectSaleRoute,
   AuthenticatedAdminEnquiriesRoute: AuthenticatedAdminEnquiriesRoute,
   AuthenticatedAdminInvoiceTermsRoute: AuthenticatedAdminInvoiceTermsRoute,
@@ -901,6 +943,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReviewsRoute: ReviewsRoute,
   SellRoute: SellRoute,
   SellYourPhoneRoute: SellYourPhoneRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   UnlockingRoute: UnlockingRoute,
   ShopSlugRoute: ShopSlugRoute,

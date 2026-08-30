@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Ban, Loader2, Printer } from "lucide-react";
+import { ArrowLeft, Ban, Loader2, Printer, Undo2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +19,7 @@ import {
   SummaryFigure,
 } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -67,6 +68,11 @@ function InvoiceDetail() {
   const [voidOpen, setVoidOpen] = useState(false);
   const [format, setFormat] = useState<PrintFormat>("a4");
   const [reason, setReason] = useState("");
+  const [refundOpen, setRefundOpen] = useState(false);
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refundMethod, setRefundMethod] = useState("CASH");
+  const [refundReason, setRefundReason] = useState("");
+  const [restock, setRestock] = useState(true);
 
   useEffect(() => {
     if (print !== "1" || !data || printed.current) return undefined;
@@ -104,6 +110,27 @@ function InvoiceDetail() {
     onSuccess: () => {
       toast.success("Record voided. Stock and balances have been restored.");
       setVoidOpen(false);
+      refresh();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const refundInvoice = useMutation({
+    mutationFn: async () =>
+      callRpc("refund_invoice", {
+        p: {
+          client_ref: newClientRef(),
+          invoice_id: invoiceId,
+          amount_pence: poundsToPence(refundAmount),
+          method: refundMethod,
+          reason: refundReason,
+          restock,
+        },
+      }),
+    onSuccess: () => {
+      toast.success("Refund recorded.");
+      setRefundOpen(false);
+      setRefundReason("");
       refresh();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -158,6 +185,22 @@ function InvoiceDetail() {
               {invoice.status === "FINAL" && invoice.balance_pence > 0 && (
                 <Button onClick={openPayment}>Take payment</Button>
               )}
+              {canVoid &&
+                invoice.status === "FINAL" &&
+                invoice.kind !== "PHONE_PURCHASE" &&
+                invoice.amount_paid_pence > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setRefundAmount(penceToPounds(invoice.amount_paid_pence));
+                      setRefundMethod("CASH");
+                      setRestock(true);
+                      setRefundOpen(true);
+                    }}
+                  >
+                    <Undo2 className="mr-2 size-4" /> Refund
+                  </Button>
+                )}
               {canVoid && invoice.status === "FINAL" && (
                 <Button variant="outline" onClick={() => setVoidOpen(true)}>
                   <Ban className="mr-2 size-4" /> Void
@@ -172,6 +215,12 @@ function InvoiceDetail() {
           {invoice.void_reason && (
             <span className="text-xs text-muted-foreground">
               Void reason: {invoice.void_reason}
+            </span>
+          )}
+          {invoice.refunded_pence > 0 && (
+            <span className="rounded-full bg-surface px-2.5 py-1 text-xs font-bold text-primary">
+              Refunded {money(invoice.refunded_pence)}
+              {invoice.refund_reason ? ` · ${invoice.refund_reason}` : ""}
             </span>
           )}
           <div className="ml-auto">
@@ -363,6 +412,81 @@ function InvoiceDetail() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <FormDialog
+        open={refundOpen}
+        onOpenChange={setRefundOpen}
+        title={`Refund ${invoice.invoice_number}`}
+        description={`Up to ${money(invoice.amount_paid_pence)} can be refunded on this invoice.`}
+        footer={
+          <>
+            <span className="mr-auto">
+              <SummaryFigure
+                label="Refund"
+                value={money(poundsToPence(refundAmount))}
+                tone="primary"
+              />
+            </span>
+            <Button variant="outline" size="sm" onClick={() => setRefundOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => refundInvoice.mutate()}
+              disabled={
+                refundInvoice.isPending ||
+                poundsToPence(refundAmount) <= 0 ||
+                poundsToPence(refundAmount) > invoice.amount_paid_pence ||
+                refundReason.trim().length < 3
+              }
+            >
+              {refundInvoice.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+              Record refund
+            </Button>
+          </>
+        }
+      >
+        <FieldGrid cols={2}>
+          <Field label="Refund amount" htmlFor="refund-amount">
+            <Input
+              id="refund-amount"
+              className="h-9"
+              inputMode="decimal"
+              autoFocus
+              value={refundAmount}
+              onChange={(e) => setRefundAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+            />
+          </Field>
+          <Field label="Refunded by" htmlFor="refund-method">
+            <Select value={refundMethod} onValueChange={setRefundMethod}>
+              <SelectTrigger id="refund-method" className="h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAYMENT_METHODS.map((m) => (
+                  <SelectItem key={m.value} value={m.value}>
+                    {m.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        </FieldGrid>
+        <Field label="Reason" htmlFor="refund-reason">
+          <Textarea
+            id="refund-reason"
+            rows={2}
+            value={refundReason}
+            onChange={(e) => setRefundReason(e.target.value)}
+            placeholder="Customer returned the item"
+          />
+        </Field>
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <Checkbox checked={restock} onCheckedChange={(v) => setRestock(v === true)} />
+          Put the item(s) back into stock
+        </label>
+      </FormDialog>
     </div>
   );
 }

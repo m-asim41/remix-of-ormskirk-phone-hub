@@ -54,6 +54,7 @@ export async function callRpc<T = unknown>(
     | "attach_invoice_terms"
     | "take_payment"
     | "void_invoice"
+    | "refund_invoice"
     | "save_customer"
     | "save_supplier"
     | "save_product"

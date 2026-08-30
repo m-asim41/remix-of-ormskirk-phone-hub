@@ -591,6 +591,9 @@ export type Database = {
           kind: string
           notes: string | null
           payment_status: string
+          refund_reason: string | null
+          refunded_at: string | null
+          refunded_pence: number
           snapshot: Json
           status: string
           subtotal_pence: number
@@ -614,6 +617,9 @@ export type Database = {
           kind: string
           notes?: string | null
           payment_status?: string
+          refund_reason?: string | null
+          refunded_at?: string | null
+          refunded_pence?: number
           snapshot?: Json
           status?: string
           subtotal_pence?: number
@@ -637,6 +643,9 @@ export type Database = {
           kind?: string
           notes?: string | null
           payment_status?: string
+          refund_reason?: string | null
+          refunded_at?: string | null
+          refunded_pence?: number
           snapshot?: Json
           status?: string
           subtotal_pence?: number
@@ -1672,6 +1681,7 @@ export type Database = {
       next_doc_number: { Args: { _prefix: string }; Returns: string }
       norm_phone: { Args: { _p: string }; Returns: string }
       recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }
+      refund_invoice: { Args: { p: Json }; Returns: Json }
       render_terms_message: {
         Args: { p_text: string; p_vars: Json }
         Returns: string

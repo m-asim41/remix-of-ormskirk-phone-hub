@@ -13,17 +13,17 @@ import { friendlyError } from "@/lib/admin/db";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Staff sign in | Phone Store Ormskirk" },
+      { title: "Staff sign in | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "Private staff sign in for the Phone Store Ormskirk counter and shop management system.",
+          "Private staff sign in for the Phone Shop Ormskirk counter and shop management system.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Staff sign in | Phone Store Ormskirk" },
+      { property: "og:title", content: "Staff sign in | Phone Shop Ormskirk" },
       {
         property: "og:description",
-        content: "Private staff sign in for the Phone Store Ormskirk shop system.",
+        content: "Private staff sign in for the Phone Shop Ormskirk shop system.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -95,7 +95,7 @@ function AuthPage() {
   return (
     <AuthShell
       title="Shop system"
-      subtitle="Phone Store Ormskirk — staff only"
+      subtitle="Phone Shop Ormskirk — staff only"
       footer={
         <button
           type="button"

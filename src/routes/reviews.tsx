@@ -12,13 +12,13 @@ import { GoogleRating } from "@/components/site/GoogleRating";
 export const Route = createFileRoute("/reviews")({
   head: () => ({
     meta: [
-      { title: "Customer Reviews | Phone Store Ormskirk" },
+      { title: "Customer Reviews | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "Read Google reviews for Phone Store Ormskirk and see what local customers say about our repairs, phones and service.",
+          "Read Google reviews for Phone Shop Ormskirk and see what local customers say about our repairs, phones and service.",
       },
-      { property: "og:title", content: "Customer Reviews | Phone Store Ormskirk" },
+      { property: "og:title", content: "Customer Reviews | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "Real Google reviews from Ormskirk customers, plus a link to our full listing.",

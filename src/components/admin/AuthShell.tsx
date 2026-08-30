@@ -21,7 +21,7 @@ export function AuthShell({
     <main className="grid min-h-dvh place-items-center bg-admin-bg px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-3">
-          <Link to="/" aria-label="Phone Store Ormskirk home">
+          <Link to="/" aria-label="Phone Shop Ormskirk home">
             <img src={logoImg} alt="" className="h-10 w-auto" />
           </Link>
           <div>

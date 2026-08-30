@@ -7,13 +7,13 @@ import { fullAddress } from "@/lib/format";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy | Phone Store Ormskirk" },
+      { title: "Privacy Policy | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "How Phone Store Ormskirk collects, uses and protects your personal data when you enquire about a repair, sale or unlocking service.",
+          "How Phone Shop Ormskirk collects, uses and protects your personal data when you enquire about a repair, sale or unlocking service.",
       },
-      { property: "og:title", content: "Privacy Policy | Phone Store Ormskirk" },
+      { property: "og:title", content: "Privacy Policy | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "How we handle your personal data and device data under UK GDPR.",
@@ -41,7 +41,7 @@ function PrivacyPage() {
       <section className="section-y">
         <div className="container-page prose-site max-w-3xl space-y-8 text-sm leading-relaxed text-muted-foreground">
           <p>
-            This policy explains how Phone Store Ormskirk handles your personal information. We are
+            This policy explains how Phone Shop Ormskirk handles your personal information. We are
             the data controller for the data described here.
           </p>
 
@@ -103,7 +103,7 @@ function PrivacyPage() {
           <div>
             <h2 className="text-base font-bold text-foreground">Contact</h2>
             <p className="mt-2">
-              {business?.business_name ?? "Phone Store Ormskirk"}
+              {business?.business_name ?? "Phone Shop Ormskirk"}
               {fullAddress(business) ? `, ${fullAddress(business)}` : ", Ormskirk, United Kingdom"}.
               {business?.email ? ` Email: ${business.email}.` : ""}
               {business?.phone ? ` Phone: ${business.phone}.` : ""}

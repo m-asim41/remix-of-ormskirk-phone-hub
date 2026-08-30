@@ -3,13 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/cookies")({
   head: () => ({
     meta: [
-      { title: "Cookie Policy | Phone Store Ormskirk" },
+      { title: "Cookie Policy | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "What cookies this website sets, why they are used, and how to change your cookie choices for Phone Store Ormskirk.",
+          "What cookies this website sets, why they are used, and how to change your cookie choices for Phone Shop Ormskirk.",
       },
-      { property: "og:title", content: "Cookie Policy | Phone Store Ormskirk" },
+      { property: "og:title", content: "Cookie Policy | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "Essential and analytics cookies explained, plus how to change your choice.",

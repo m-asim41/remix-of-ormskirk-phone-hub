@@ -79,7 +79,7 @@ export function InvoiceDocument({
           />
           <div>
             <p className="text-xl font-extrabold tracking-tight">
-              {business.business_name ?? "Phone Store Ormskirk"}
+              {business.business_name ?? "Phone Shop Ormskirk"}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-ink/70">
               {[business.address_line1, business.city, business.postcode]
@@ -213,7 +213,7 @@ export function InvoiceDocument({
           {invoice.notes && <p>{invoice.notes}</p>}
           {!terms && business.warranty_policy && <p>{business.warranty_policy}</p>}
           <p className="font-semibold text-ink">
-            Thank you for choosing {business.business_name ?? "Phone Store Ormskirk"}.
+            Thank you for choosing {business.business_name ?? "Phone Shop Ormskirk"}.
           </p>
         </footer>
       )}

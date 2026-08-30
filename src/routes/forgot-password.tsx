@@ -11,14 +11,14 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset staff password | Phone Store Ormskirk" },
+      { title: "Reset staff password | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "Request a password reset link for the Phone Store Ormskirk staff shop system.",
+          "Request a password reset link for the Phone Shop Ormskirk staff shop system.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Reset staff password | Phone Store Ormskirk" },
+      { property: "og:title", content: "Reset staff password | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "Request a password reset link for the staff shop system.",
@@ -49,7 +49,7 @@ function ForgotPassword() {
   return (
     <AuthShell
       title="Forgotten password"
-      subtitle="Phone Store Ormskirk — staff only"
+      subtitle="Phone Shop Ormskirk — staff only"
       footer={
         <Link to="/auth" className="font-semibold underline-offset-4 hover:underline">
           Back to sign in

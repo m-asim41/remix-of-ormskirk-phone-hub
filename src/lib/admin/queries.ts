@@ -54,6 +54,9 @@ export type Invoice = {
   snapshot: Record<string, unknown>;
   notes: string | null;
   void_reason: string | null;
+  refunded_pence: number;
+  refunded_at: string | null;
+  refund_reason: string | null;
   created_at: string;
 };
 

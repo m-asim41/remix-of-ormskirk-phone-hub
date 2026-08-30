@@ -216,6 +216,12 @@ function InvoiceDetail() {
               Void reason: {invoice.void_reason}
             </span>
           )}
+          {invoice.refunded_pence > 0 && (
+            <span className="rounded-full bg-surface px-2.5 py-1 text-xs font-bold text-primary">
+              Refunded {money(invoice.refunded_pence)}
+              {invoice.refund_reason ? ` · ${invoice.refund_reason}` : ""}
+            </span>
+          )}
           <div className="ml-auto">
             <FilterPills
               options={[

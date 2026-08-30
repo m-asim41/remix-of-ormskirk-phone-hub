@@ -88,7 +88,7 @@ function AdminLayout() {
           <Link to="/admin" className="flex items-center gap-2.5">
             <img src={logoImg} alt="" className="h-8 w-auto" />
             <span className="hidden text-sm font-extrabold leading-tight sm:block">
-              Phone Store
+              Phone Shop
               <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Shop system
               </span>

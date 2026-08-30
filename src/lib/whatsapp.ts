@@ -14,7 +14,7 @@ export type WhatsAppContext =
   | { kind: "stock"; product: string }
   | { kind: "unlock"; device?: string; network?: string };
 
-const BUSINESS = "Phone Store";
+const BUSINESS = "Phone Shop Ormskirk";
 
 function lines(ctx: WhatsAppContext): string[] {
   switch (ctx.kind) {

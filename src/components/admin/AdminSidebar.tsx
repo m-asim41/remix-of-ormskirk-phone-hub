@@ -4,6 +4,7 @@ import {
   BarChart3,
   Boxes,
   Building2,
+  CalendarCheck,
   ChevronDown,
   ClipboardList,
   FileText,
@@ -60,6 +61,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
     title: "Business",
     items: [
       { to: "/admin/reports", label: "Reports", icon: BarChart3 },
+      { to: "/admin/day-end", label: "Day End & Cash Up", icon: CalendarCheck },
       { to: "/admin/enquiries", label: "Enquiries", icon: Inbox },
     ],
   },

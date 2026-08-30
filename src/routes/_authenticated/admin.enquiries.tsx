@@ -26,7 +26,7 @@ const TYPE_LABEL: Record<string, string> = {
 function waLink(phone: string, name: string) {
   const digits = phone.replace(/\D/g, "").replace(/^0/, "44");
   return `https://wa.me/${digits}?text=${encodeURIComponent(
-    `Hi ${name}, this is Phone Store Ormskirk replying to your website enquiry.`,
+    `Hi ${name}, this is Phone Shop Ormskirk replying to your website enquiry.`,
   )}`;
 }
 

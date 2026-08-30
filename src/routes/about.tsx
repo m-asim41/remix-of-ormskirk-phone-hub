@@ -36,7 +36,7 @@ function AboutPage() {
           <span className="eyebrow-on-brand">About us</span>
           <h1 className="display-1 mt-4 max-w-3xl">About Phone Shop Ormskirk</h1>
           <p className="mt-5 max-w-2xl text-lg text-on-brand/85">
-            {business?.business_name ?? "Phone Store Ormskirk"} is an independent shop. No call
+            {business?.business_name ?? "Phone Shop Ormskirk"} is an independent shop. No call
             centres, no scripts — just people who fix phones every day and will tell you honestly
             whether a repair is worth doing.
           </p>

@@ -6,13 +6,13 @@ import { businessQuery } from "@/lib/queries";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service | Phone Store Ormskirk" },
+      { title: "Terms of Service | Phone Shop Ormskirk" },
       {
         name: "description",
         content:
-          "Terms covering quotes, repairs, devices left with us, parts, payment and your statutory rights at Phone Store Ormskirk.",
+          "Terms covering quotes, repairs, devices left with us, parts, payment and your statutory rights at Phone Shop Ormskirk.",
       },
-      { property: "og:title", content: "Terms of Service | Phone Store Ormskirk" },
+      { property: "og:title", content: "Terms of Service | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "Quotes, repairs, devices, payment and your statutory rights.",

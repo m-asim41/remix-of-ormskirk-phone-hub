@@ -21,7 +21,7 @@ export const Route = createFileRoute("/shop/")({
       { property: "og:title", content: "Pre-Owned Phones & Accessories Ormskirk" },
       {
         property: "og:description",
-        content: "Refurbished phones and everyday accessories, in stock at Phone Store Ormskirk.",
+        content: "Refurbished phones and everyday accessories, in stock at Phone Shop Ormskirk.",
       },
       { property: "og:url", content: "/shop" },
       { property: "og:type", content: "website" },

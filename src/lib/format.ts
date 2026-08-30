@@ -160,7 +160,7 @@ export function directionsUrl(b: BusinessSettings | null | undefined) {
 export function reviewsUrl(b: BusinessSettings | null | undefined) {
   if (b?.google_reviews_url) return b.google_reviews_url;
   return `https://www.google.com/search?q=${encodeURIComponent(
-    `${b?.business_name ?? "Phone Store Ormskirk"} reviews Ormskirk`,
+    `${b?.business_name ?? "Phone Shop Ormskirk"} reviews Ormskirk`,
   )}`;
 }
 
@@ -181,7 +181,7 @@ export function localBusinessSchema(b: BusinessSettings | null | undefined) {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "MobilePhoneStore"],
     priceRange: "£",
-    name: b?.business_name ?? "Phone Store Ormskirk",
+    name: b?.business_name ?? "Phone Shop Ormskirk",
     description:
       b?.tagline ?? "Phone repairs, unlocking, used phones and accessories in Ormskirk.",
     address: {

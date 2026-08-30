@@ -129,7 +129,7 @@ function ContactPage() {
             {business?.google_maps_embed_url ? (
               <div className="overflow-hidden rounded-xl border border-border">
                 <iframe
-                  title="Map showing Phone Store Ormskirk"
+                  title="Map showing Phone Shop Ormskirk"
                   src={business.google_maps_embed_url}
                   loading="lazy"
                   className="h-72 w-full border-0"

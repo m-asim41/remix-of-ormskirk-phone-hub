@@ -82,7 +82,7 @@ export function ReceiptDocument({
           className="mx-auto mb-2 h-10 w-auto object-contain"
         />
         <p className="text-sm font-extrabold uppercase tracking-wide">
-          {business.business_name ?? "Phone Store Ormskirk"}
+          {business.business_name ?? "Phone Shop Ormskirk"}
         </p>
         <p className="mt-0.5 text-[0.7rem]">
           {[business.address_line1, business.city, business.postcode]
@@ -164,7 +164,7 @@ export function ReceiptDocument({
         {invoice.notes && <p>{invoice.notes}</p>}
         {!terms && business.warranty_policy && <p>{business.warranty_policy}</p>}
         <p className="mt-1 text-center font-semibold">
-          Thank you for choosing {business.business_name ?? "Phone Store Ormskirk"}.
+          Thank you for choosing {business.business_name ?? "Phone Shop Ormskirk"}.
         </p>
       </div>
     </div>

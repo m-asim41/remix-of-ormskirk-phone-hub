@@ -16,12 +16,12 @@ export const Route = createFileRoute("/shop/$slug")({
       .join(" ");
     return {
       meta: [
-        { title: `${name} | Phone Store Ormskirk` },
+        { title: `${name} | Phone Shop Ormskirk` },
         {
           name: "description",
-          content: `${name} available at Phone Store Ormskirk. Reserve over WhatsApp and collect in store.`,
+          content: `${name} available at Phone Shop Ormskirk. Reserve over WhatsApp and collect in store.`,
         },
-        { property: "og:title", content: `${name} | Phone Store Ormskirk` },
+        { property: "og:title", content: `${name} | Phone Shop Ormskirk` },
         {
           property: "og:description",
           content: `${name} available in our Ormskirk store.`,

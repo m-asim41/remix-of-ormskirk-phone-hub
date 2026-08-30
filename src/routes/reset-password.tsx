@@ -12,13 +12,13 @@ import { friendlyError } from "@/lib/admin/db";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set a new password | Phone Store Ormskirk" },
+      { title: "Set a new password | Phone Shop Ormskirk" },
       {
         name: "description",
-        content: "Choose a new password for your Phone Store Ormskirk staff account.",
+        content: "Choose a new password for your Phone Shop Ormskirk staff account.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Set a new password | Phone Store Ormskirk" },
+      { property: "og:title", content: "Set a new password | Phone Shop Ormskirk" },
       {
         property: "og:description",
         content: "Choose a new password for your staff account.",
@@ -83,7 +83,7 @@ function ResetPassword() {
   return (
     <AuthShell
       title="New password"
-      subtitle="Phone Store Ormskirk — staff only"
+      subtitle="Phone Shop Ormskirk — staff only"
       footer={
         <Link to="/auth" className="font-semibold underline-offset-4 hover:underline">
           Back to sign in

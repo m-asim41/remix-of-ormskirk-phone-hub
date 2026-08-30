@@ -1,36 +1,48 @@
-# End-to-end counter QA + bug hunt
+# Production readiness — what's done, what's missing
 
-Goal: run the full counter workflow like real staff would, find anything broken, and fix it. No redesign, no new features.
+Site + admin/POS are functionally complete and the build is clean. Below is what still stands between "working" and "safe to run the shop on it".
 
-## Confirmed issue already visible
+## Must do before going live
 
-The preview logs show a React hydration mismatch on the public site (header phone link / footer link row render differently on the server than in the browser). It does not break the page visually, but it causes a full client re-render and console errors. First fix in this pass.
+1. **Full security scan + fix**
+   Only the dependency scan has run recently. Run the complete scan (RLS, policies, grants, exposed data) and fix anything critical before publishing.
 
-## What gets tested, end to end
+2. **Refunds / returns flow (missing)**
+   There is currently no way to refund a customer or take a handset back. Today the only option is voiding an invoice, which is wrong after money has changed hands. Add:
+   - Refund action on a paid invoice (full or partial), recorded as a negative payment
+   - Return of a serialised handset back into stock, or accessory quantity back
+   - Refund receipt print (A4 + thermal) reusing the existing documents
 
-Each scenario is driven in a real browser against the live app, with the resulting database rows and printed output checked afterwards.
+3. **Day-end / cash reconciliation (missing)**
+   No end-of-day summary. Add a "Day end" screen: takings by payment method (cash/card), count of invoices, refunds, expected cash in drawer, and a printable summary.
 
-1. New Repair — £79 job, £5 discount, £30 part payment, then settle the balance. Check totals, payment status (PARTIAL then PAID), invoice number, terms/customer message on print.
-2. Buy Phone — purchase at £200 with £300 intended resale. Check stock device created, IMEI stored, expected gross profit strip, purchase receipt print.
-3. Sell Phone — sell that same device by IMEI. Check stock marked SOLD, profit recorded, sale invoice + warranty message.
-4. Duplicate IMEI — attempt to sell the already-sold device; must be blocked with a clear message, not a raw database error.
-5. Direct Sale — two products, discount, cash tendered above total. Check change-due display, stock quantities decrement, receipt.
-6. Payments — overpayment rejected, payment on a voided invoice rejected, quick-amount buttons and cash change correct.
-7. Void — void a finalised sale with a reason; check reversal (stock back in), audit row, and that voided records drop out of dashboard/report totals.
-8. Refresh / back-button double-submit on every create form (idempotency).
-9. Auth — login, wrong password message, forgot password, reset password, logout, session restore, role gating (staff cannot void or change roles).
+4. **Sitemap + search-engine finish**
+   `public/sitemap.xml` does not exist and robots.txt does not reference one. Add a sitemap covering all public pages and link it from robots.txt.
 
-## Checks that run alongside
+5. **Staff accounts + roles for real use**
+   Only the owner account exists. Create the actual counter staff logins with the correct role, and confirm each role can only reach the screens it should.
 
-- Print output for all four document types in both A4 and 80mm thermal: no clipping, terms/customer message present, long names and many line items handled.
-- Console and network clean on every admin screen (no errors, no failed requests, no missing data).
-- No page-level scrollbar on the counter forms at 1366x768 and 1920x1080; mobile pass at 375 and 768.
-- Money maths spot-checked against the database in integer pence, and dashboard vs Reports totals compared for the same date range.
+## Should do (strongly recommended)
 
-## How fixes are handled
+6. **Low-stock alerts** — a threshold per accessory and a warning list on the admin dashboard so items don't run out silently.
+7. **Business settings sanity pass** — VAT number, company registration (if any), invoice number prefix, opening hours and bank/payment details verified with Altaf so printed invoices are correct.
+8. **Backup/export** — one-click CSV export of invoices, stock and customers so the shop is never locked into one system.
+9. **Final live QA on the counter** — one real pass of repair, buy, sell, direct sale, part payment, refund, and print on the actual 80mm printer.
 
-Anything found is fixed in the same pass, smallest safe change first: UI/validation issues in the route components, wording in the shared admin UI, and database-side issues only where an RPC genuinely misbehaves. After each batch of fixes the affected scenario is re-run to confirm it passes.
+## Nice to have (later)
 
-## Report
+- Customer SMS/email notification when a repair is ready
+- Repair job status board for the workshop
+- Supplier purchase orders
+- Monthly profit/VAT report export for the accountant
 
-Closing summary lists every scenario as pass/fail, each bug found with what was changed, and anything that can only be verified with the real thermal printer or real shop data.
+## Technical notes
+
+- Refunds: new `refund_invoice` RPC mirroring `void_invoice` but money-aware — inserts a negative payment row, reverses stock (serialised item back to `in_stock`, accessory quantity incremented), writes an audit log entry, never mutates the original invoice or its terms snapshot.
+- Day end: server-side aggregate query over payments grouped by method for a date range, printed through the existing thermal document component.
+- Sitemap: static `public/sitemap.xml` listing `/`, `/repairs`, `/phone-repair-ormskirk`, `/shop`, `/sell-your-phone`, `/unlocking`, `/reviews`, `/faq`, `/about`, `/contact`, `/privacy`, `/terms`, `/cookies`; add `Sitemap:` line to robots.txt.
+- Low stock: `low_stock_threshold` column on products, dashboard widget filtering below it.
+
+## Suggested order
+
+Security scan → refunds/returns → day end → sitemap → staff accounts → low stock + settings + export → final counter QA → publish.

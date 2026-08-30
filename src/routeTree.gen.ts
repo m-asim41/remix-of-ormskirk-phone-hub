@@ -24,6 +24,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as SellYourPhoneRouteImport } from './routes/sell-your-phone'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UnlockingRouteImport } from './routes/unlocking'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -122,6 +123,11 @@ const SellRoute = SellRouteImport.update({
 const SellYourPhoneRoute = SellYourPhoneRouteImport.update({
   id: '/sell-your-phone',
   path: '/sell-your-phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -282,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/shop/$slug': typeof ShopSlugRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/reviews': typeof ReviewsRoute
   '/sell': typeof SellRoute
   '/sell-your-phone': typeof SellYourPhoneRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/unlocking': typeof UnlockingRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -408,6 +417,7 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/admin'
@@ -449,6 +459,7 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/shop/$slug'
@@ -490,6 +501,7 @@ export interface FileRouteTypes {
     | '/reviews'
     | '/sell'
     | '/sell-your-phone'
+    | '/sitemap.xml'
     | '/terms'
     | '/unlocking'
     | '/_authenticated/admin'
@@ -533,6 +545,7 @@ export interface RootRouteChildren {
   ReviewsRoute: typeof ReviewsRoute
   SellRoute: typeof SellRoute
   SellYourPhoneRoute: typeof SellYourPhoneRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   UnlockingRoute: typeof UnlockingRoute
   ShopSlugRoute: typeof ShopSlugRoute
@@ -644,6 +657,13 @@ declare module '@tanstack/react-router' {
       path: '/sell-your-phone'
       fullPath: '/sell-your-phone'
       preLoaderRoute: typeof SellYourPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -901,6 +921,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReviewsRoute: ReviewsRoute,
   SellRoute: SellRoute,
   SellYourPhoneRoute: SellYourPhoneRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   UnlockingRoute: UnlockingRoute,
   ShopSlugRoute: ShopSlugRoute,

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Ban, Loader2, Printer } from "lucide-react";
+import { ArrowLeft, Ban, Loader2, Printer, Undo2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +19,7 @@ import {
   SummaryFigure,
 } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -411,6 +412,81 @@ function InvoiceDetail() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <FormDialog
+        open={refundOpen}
+        onOpenChange={setRefundOpen}
+        title={`Refund ${invoice.invoice_number}`}
+        description={`Up to ${money(invoice.amount_paid_pence)} can be refunded on this invoice.`}
+        footer={
+          <>
+            <span className="mr-auto">
+              <SummaryFigure
+                label="Refund"
+                value={money(poundsToPence(refundAmount))}
+                tone="primary"
+              />
+            </span>
+            <Button variant="outline" size="sm" onClick={() => setRefundOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => refundInvoice.mutate()}
+              disabled={
+                refundInvoice.isPending ||
+                poundsToPence(refundAmount) <= 0 ||
+                poundsToPence(refundAmount) > invoice.amount_paid_pence ||
+                refundReason.trim().length < 3
+              }
+            >
+              {refundInvoice.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+              Record refund
+            </Button>
+          </>
+        }
+      >
+        <FieldGrid cols={2}>
+          <Field label="Refund amount" htmlFor="refund-amount">
+            <Input
+              id="refund-amount"
+              className="h-9"
+              inputMode="decimal"
+              autoFocus
+              value={refundAmount}
+              onChange={(e) => setRefundAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+            />
+          </Field>
+          <Field label="Refunded by" htmlFor="refund-method">
+            <Select value={refundMethod} onValueChange={setRefundMethod}>
+              <SelectTrigger id="refund-method" className="h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAYMENT_METHODS.map((m) => (
+                  <SelectItem key={m.value} value={m.value}>
+                    {m.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        </FieldGrid>
+        <Field label="Reason" htmlFor="refund-reason">
+          <Textarea
+            id="refund-reason"
+            rows={2}
+            value={refundReason}
+            onChange={(e) => setRefundReason(e.target.value)}
+            placeholder="Customer returned the item"
+          />
+        </Field>
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <Checkbox checked={restock} onCheckedChange={(v) => setRestock(v === true)} />
+          Put the item(s) back into stock
+        </label>
+      </FormDialog>
     </div>
   );
 }

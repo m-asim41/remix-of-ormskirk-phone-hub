@@ -884,3 +884,43 @@ export const staffQuery = queryOptions({
     }));
   },
 });
+
+/* ------------------------------- day end ---------------------------------- */
+
+export const dayEndQuery = (day: string) =>
+  queryOptions({
+    queryKey: ["admin", "day-end", day],
+    queryFn: async () => {
+      const start = new Date(`${day}T00:00:00`).toISOString();
+      const end = new Date(`${day}T23:59:59.999`).toISOString();
+      const [payments, invoices] = await Promise.all([
+        supabase
+          .from("payments")
+          .select("*, invoices(invoice_number, kind)")
+          .gte("created_at", start)
+          .lte("created_at", end)
+          .order("created_at"),
+        supabase
+          .from("invoices")
+          .select("id,invoice_number,kind,status,total_pence,refunded_pence,created_at")
+          .gte("created_at", start)
+          .lte("created_at", end)
+          .order("created_at"),
+      ]);
+      return {
+        payments: unwrap<Payment[]>(payments),
+        invoices: unwrap<
+          Pick<
+            Invoice,
+            | "id"
+            | "invoice_number"
+            | "kind"
+            | "status"
+            | "total_pence"
+            | "refunded_pence"
+            | "created_at"
+          >[]
+        >(invoices),
+      };
+    },
+  });

@@ -196,7 +196,7 @@ function Reports() {
                 ) : (
                   <Download className="mr-2 size-4" />
                 )}
-                {kind === "stock" ? "Stock CSV" : `${kind[0].toUpperCase()}${kind.slice(1)} CSV`}
+                {{ invoices: "Invoices CSV", payments: "Payments CSV", stock: "Stock CSV" }[kind]}
               </Button>
             ))}
           </div>

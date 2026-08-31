@@ -19,6 +19,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { FaqList } from "@/components/site/FaqList";
 import { WhyChooseUs } from "@/components/site/WhyChooseUs";
+import { useParallax } from "@/lib/useParallax";
 
 export const Route = createFileRoute("/")({
   head: () => ({

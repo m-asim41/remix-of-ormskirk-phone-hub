@@ -441,6 +441,19 @@
   border: 1px solid color-mix(in oklab, var(--color-on-brand) 16%, transparent);
 }
 
+/* --- Hero parallax layers (driven by --parallax-y on the hero section) --- */
+@utility parallax-layer {
+  will-change: transform;
+  transform: translate3d(0, calc(var(--parallax-y, 0px) * var(--parallax-speed, 0.5)), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-layer {
+    transform: none;
+    will-change: auto;
+  }
+}
+
 @utility body-copy {
   font-size: 0.9375rem;
   line-height: 1.7;

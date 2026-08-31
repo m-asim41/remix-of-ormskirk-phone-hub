@@ -91,19 +91,27 @@ function Index() {
   const featuredProducts = products.filter((p) => p.featured && !phoneIds.has(p.id)).slice(0, 4);
   const storefront = business?.storefront_image_url ?? storefrontAsset.url;
   const interior = business?.storefront_interior_image_url;
+  const heroRef = useParallax<HTMLElement>();
 
   return (
     <>
       {/* 1 — RED hero */}
-      <section className="brand-panel relative isolate overflow-hidden">
-        <span className="deco-lines" aria-hidden />
+      <section ref={heroRef} className="brand-panel relative isolate overflow-hidden">
         <span
-          className="deco-arc -right-40 -top-52 size-[34rem] md:-right-24"
+          className="deco-lines parallax-layer [--parallax-speed:0.6]"
           aria-hidden
         />
-        <span className="deco-arc -bottom-72 -left-40 size-[30rem]" aria-hidden />
+        <span
+          className="deco-arc parallax-layer -right-40 -top-52 size-[34rem] [--parallax-speed:0.45] md:-right-24"
+          aria-hidden
+        />
+        <span
+          className="deco-arc parallax-layer -bottom-72 -left-40 size-[30rem] [--parallax-speed:0.3]"
+          aria-hidden
+        />
         <div className="container-page relative grid items-center gap-14 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:py-28">
-          <div className="rise-in max-w-2xl">
+          <div className="parallax-layer max-w-2xl [--parallax-speed:-0.15]">
+            <div className="rise-in max-w-2xl">
             <span className="eyebrow-on-brand">Ormskirk · Lancashire</span>
             <h1 className="mt-6 text-[clamp(2.5rem,7vw,4.75rem)] leading-[1]">
               Phone repairs

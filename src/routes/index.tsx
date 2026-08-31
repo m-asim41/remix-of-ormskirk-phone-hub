@@ -161,9 +161,10 @@ function Index() {
                 {fullAddress(business) || "Ormskirk town centre"}
               </span>
             </div>
+            </div>
           </div>
 
-          <div className="relative">
+          <div className="parallax-layer relative [--parallax-speed:0.35]">
             <div className="float-slow relative isolate overflow-hidden rounded-3xl border border-on-brand/20 shadow-lift">
               <img
                 src={heroImg}

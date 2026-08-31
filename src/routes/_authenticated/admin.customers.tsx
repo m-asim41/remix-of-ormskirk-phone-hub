@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Plus, Search } from "lucide-react";
+import { Download, Loader2, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { callRpc } from "@/lib/admin/db";
+import { downloadCsv } from "@/lib/admin/csv";
 import { ukDate } from "@/lib/admin/money";
 import { customersQuery, type Customer } from "@/lib/admin/queries";
 
@@ -87,9 +88,27 @@ function Customers() {
         title="Customers"
         description="Search by name, phone or email. Phone numbers match however they are typed."
         actions={
-          <Button onClick={() => setForm({ ...blank })}>
-            <Plus className="mr-2 size-4" /> New customer
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              disabled={!data.length}
+              onClick={() =>
+                downloadCsv(
+                  "customers.csv",
+                  ["Name", "Phone", "Email", "Address", "Postcode", "Notes", "Added"],
+                  data.map((c) => [
+                    c.name, c.phone, c.email ?? "", c.address ?? "",
+                    c.postcode ?? "", c.notes ?? "", ukDate(c.created_at),
+                  ]),
+                )
+              }
+            >
+              <Download className="mr-2 size-4" /> Export CSV
+            </Button>
+            <Button onClick={() => setForm({ ...blank })}>
+              <Plus className="mr-2 size-4" /> New customer
+            </Button>
+          </div>
         }
       />
 

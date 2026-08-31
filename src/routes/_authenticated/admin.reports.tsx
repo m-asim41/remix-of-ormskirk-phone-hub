@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { Download, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import {
   EmptyState,
@@ -13,10 +15,13 @@ import {
   Th,
 } from "@/components/admin/ui";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FilterPills } from "@/components/admin/ui";
-import { daysInStock, money } from "@/lib/admin/money";
+import { downloadCsv } from "@/lib/admin/csv";
+import { daysInStock, money, penceToPounds, ukDate } from "@/lib/admin/money";
 import { reportsQuery } from "@/lib/admin/queries";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/reports")({
   component: Reports,
@@ -40,6 +45,84 @@ function Reports() {
   }, [preset, from, to]);
 
   const { data, isLoading } = useQuery(reportsQuery(range.from, range.to));
+  const [exporting, setExporting] = useState<string | null>(null);
+
+  async function runExport(kind: "invoices" | "payments" | "stock") {
+    setExporting(kind);
+    try {
+      const stamp = range.from.slice(0, 10);
+      if (kind === "invoices") {
+        const { data, error } = await supabase
+          .from("invoices")
+          .select(
+            "invoice_number,kind,status,payment_status,subtotal_pence,discount_pence,total_pence,amount_paid_pence,balance_pence,refunded_pence,created_at",
+          )
+          .gte("created_at", range.from)
+          .lte("created_at", range.to)
+          .order("created_at");
+        if (error) throw error;
+        downloadCsv(
+          `invoices-${stamp}.csv`,
+          [
+            "Invoice", "Type", "Status", "Payment status", "Subtotal (£)", "Discount (£)",
+            "Total (£)", "Paid (£)", "Balance (£)", "Refunded (£)", "Date",
+          ],
+          (data ?? []).map((i) => [
+            i.invoice_number, i.kind, i.status, i.payment_status,
+            penceToPounds(i.subtotal_pence), penceToPounds(i.discount_pence),
+            penceToPounds(i.total_pence), penceToPounds(i.amount_paid_pence),
+            penceToPounds(i.balance_pence), penceToPounds(i.refunded_pence),
+            ukDate(i.created_at),
+          ]),
+        );
+      } else if (kind === "payments") {
+        const { data, error } = await supabase
+          .from("payments")
+          .select("amount_pence,method,direction,reference,notes,created_at,invoices(invoice_number)")
+          .gte("created_at", range.from)
+          .lte("created_at", range.to)
+          .order("created_at");
+        if (error) throw error;
+        downloadCsv(
+          `payments-${stamp}.csv`,
+          ["Date", "Invoice", "Method", "Direction", "Amount (£)", "Reference", "Note"],
+          (data ?? []).map((p) => [
+            ukDate(p.created_at),
+            (p.invoices as { invoice_number?: string } | null)?.invoice_number ?? "",
+            p.method, p.direction, penceToPounds(p.amount_pence),
+            p.reference ?? "", p.notes ?? "",
+          ]),
+        );
+      } else {
+        const { data, error } = await supabase
+          .from("stock_items")
+          .select(
+            "sku,brand,model,imei,storage,colour,network,condition,battery_health,purchase_cost_pence,selling_price_pence,status,source,created_at",
+          )
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        downloadCsv(
+          `stock-${stamp}.csv`,
+          [
+            "SKU", "Brand", "Model", "IMEI", "Storage", "Colour", "Network", "Condition",
+            "Battery", "Cost (£)", "Selling (£)", "Status", "Source", "Added",
+          ],
+          (data ?? []).map((s) => [
+            s.sku, s.brand ?? "", s.model ?? "", s.imei ?? "", s.storage ?? "",
+            s.colour ?? "", s.network ?? "", s.condition ?? "", s.battery_health ?? "",
+            penceToPounds(s.purchase_cost_pence),
+            s.selling_price_pence == null ? "" : penceToPounds(s.selling_price_pence),
+            s.status, s.source ?? "", ukDate(s.created_at),
+          ]),
+        );
+      }
+      toast.success("CSV downloaded.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Export failed.");
+    } finally {
+      setExporting(null);
+    }
+  }
 
   const live = <T extends { record_status?: string }>(records: T[]) =>
     records.filter((r) => r.record_status !== "VOIDED");
@@ -99,6 +182,25 @@ function Reports() {
       <PageHeader
         title="Reports"
         description="Revenue, profit and stock health for the period you choose."
+        actions={
+          <div className="flex flex-wrap gap-2">
+            {(["invoices", "payments", "stock"] as const).map((kind) => (
+              <Button
+                key={kind}
+                variant="outline"
+                disabled={exporting !== null}
+                onClick={() => runExport(kind)}
+              >
+                {exporting === kind ? (
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                ) : (
+                  <Download className="mr-2 size-4" />
+                )}
+                {{ invoices: "Invoices CSV", payments: "Payments CSV", stock: "Stock CSV" }[kind]}
+              </Button>
+            ))}
+          </div>
+        }
       />
 
       <div className="admin-card flex flex-wrap items-end gap-4 p-4">

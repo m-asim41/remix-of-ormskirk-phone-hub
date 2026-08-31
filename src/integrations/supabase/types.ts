@@ -1611,6 +1611,39 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_existing_phone_stock: {
+        Args: { p: Json }
+        Returns: {
+          battery_health: string | null
+          brand: string | null
+          colour: string | null
+          condition: string | null
+          created_at: string
+          created_by: string | null
+          featured: boolean
+          id: string
+          imei: string | null
+          model: string | null
+          network: string | null
+          notes: string | null
+          public_visibility: boolean
+          purchase_cost_pence: number
+          purchase_reference: string | null
+          selling_price_pence: number | null
+          serial: string | null
+          sku: string
+          source: string | null
+          status: string
+          storage: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "stock_items"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       adjust_product_stock: {
         Args: { p: Json }
         Returns: {

@@ -264,7 +264,7 @@ export type Database = {
           id: string
           name: string
           notes: string | null
-          phone: string
+          phone: string | null
           phone_normalized: string | null
           postcode: string | null
           updated_at: string
@@ -277,7 +277,7 @@ export type Database = {
           id?: string
           name: string
           notes?: string | null
-          phone: string
+          phone?: string | null
           phone_normalized?: string | null
           postcode?: string | null
           updated_at?: string
@@ -290,7 +290,7 @@ export type Database = {
           id?: string
           name?: string
           notes?: string | null
-          phone?: string
+          phone?: string | null
           phone_normalized?: string | null
           postcode?: string | null
           updated_at?: string
@@ -1697,7 +1697,7 @@ export type Database = {
           id: string
           name: string
           notes: string | null
-          phone: string
+          phone: string | null
           phone_normalized: string | null
           postcode: string | null
           updated_at: string

@@ -1798,6 +1798,7 @@ export type Database = {
         Args: { _email?: string; _full_name?: string }
         Returns: Json
       }
+      export_all_data_as_sql: { Args: never; Returns: string[] }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

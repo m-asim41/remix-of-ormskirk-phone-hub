@@ -1,22 +1,24 @@
-# Daily Sales & Expenses — add missing table GRANTs
+# Full database export (CSV) — all live data
 
-You ran the migration yourself and it worked: both tables, indexes, RLS policies, all four RPCs (`save_daily_sale`, `void_daily_sale`, `save_expense`, `void_expense`) and the `updated_at` triggers are all in place.
+You are moving to your own Supabase project, so you need a complete copy of the live data. This exports every table as a CSV file (standard format Supabase can import), bundled into one downloadable zip.
 
-## One problem remains
+## What gets exported (all 29 tables)
 
-The SQL you ran had **no table GRANTs**, so the app cannot reach either table — verified in the live database: only my sandbox role has access; the `authenticated` role your staff screens use has none. `/admin/daily-sales` and `/admin/expenses` will show permission errors until this is fixed.
+- **Money / documents:** invoices, invoice_items, invoice_terms, invoice_terms_settings, payments, sales, sale_items, repair_invoices, phone_purchases, phone_purchase_items, doc_sequences
+- **People:** customers, customer_ledger_entries, suppliers, supplier_ledger_entries, profiles, user_roles
+- **Stock:** products, product_categories, product_images, stock_items, stock_movements
+- **Daily ops:** daily_sales, expenses
+- **Website:** repair_services, faqs, customer_reviews, business_settings, website_enquiries, audit_logs
 
-## Small fix migration
+Each becomes one `.csv` with headers, and all files are zipped into `db-export.zip` you can download and import into your new Supabase project.
 
-Run one GRANT-only migration:
+## Notes for importing to your own Supabase
 
-- `GRANT SELECT, INSERT, UPDATE ON public.expenses TO authenticated;`
-- `GRANT ALL ON public.expenses TO service_role;`
-- `GRANT SELECT, INSERT, UPDATE ON public.daily_sales TO authenticated;`
-- `GRANT ALL ON public.daily_sales TO service_role;`
+- `user_roles` links users to roles by user ID — the user IDs will differ in your new project, so re-assign your OWNER role there after creating your account.
+- `profiles` likewise references auth user IDs from this project.
+- Everything else (invoices, stock, customers, expenses, website content) imports as-is.
 
-No `anon` grant (both tables are staff-only) and no DELETE (your design uses voiding, not deletion).
+## What is NOT exportable this way
 
-## After the fix
-
-Approve and it applies immediately — then both admin screens work for staff and managers as designed.
+- Auth user accounts (emails/passwords) — Supabase does not expose password hashes through SQL. You'll need to re-create user accounts in your new project.
+- The database functions (save_expense, take_payment, direct_sale, etc.) — if you want the full SQL definitions of all functions and RLS policies to recreate the backend in your project, say so and I'll export those too.

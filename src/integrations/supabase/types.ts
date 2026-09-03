@@ -297,6 +297,56 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_sales: {
+        Row: {
+          card_sale_pence: number
+          cash_sale_pence: number
+          created_at: string
+          created_by: string | null
+          description: string | null
+          entry_date: string
+          id: string
+          staff_name: string
+          status: string
+          updated_at: string
+          void_reason: string | null
+        }
+        Insert: {
+          card_sale_pence?: number
+          cash_sale_pence?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          entry_date?: string
+          id?: string
+          staff_name: string
+          status?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Update: {
+          card_sale_pence?: number
+          cash_sale_pence?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          entry_date?: string
+          id?: string
+          staff_name?: string
+          status?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_sales_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doc_sequences: {
         Row: {
           last_value: number
@@ -311,6 +361,62 @@ export type Database = {
           prefix?: string
         }
         Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount_pence: number
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string
+          expense_date: string
+          id: string
+          notes: string | null
+          payment_method: string
+          reference: string | null
+          status: string
+          updated_at: string
+          void_reason: string | null
+        }
+        Insert: {
+          amount_pence: number
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          reference?: string | null
+          status?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Update: {
+          amount_pence?: number
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          reference?: string | null
+          status?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       faqs: {
         Row: {
@@ -1742,6 +1848,30 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      save_daily_sale: {
+        Args: {
+          p_card_pence?: number
+          p_cash_pence?: number
+          p_description?: string
+          p_entry_date?: string
+          p_id?: string
+          p_staff_name?: string
+        }
+        Returns: Json
+      }
+      save_expense: {
+        Args: {
+          p_amount_pence?: number
+          p_category?: string
+          p_description?: string
+          p_expense_date?: string
+          p_id?: string
+          p_notes?: string
+          p_payment_method?: string
+          p_reference?: string
+        }
+        Returns: Json
+      }
       save_product: {
         Args: { p: Json }
         Returns: {
@@ -1834,6 +1964,11 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      void_daily_sale: {
+        Args: { p_id: string; p_reason?: string }
+        Returns: Json
+      }
+      void_expense: { Args: { p_id: string; p_reason?: string }; Returns: Json }
       void_invoice: { Args: { p: Json }; Returns: Json }
     }
     Enums: {
@@ -1853,12 +1988,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1882,11 +2017,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1907,11 +2042,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1932,11 +2067,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1949,11 +2084,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
